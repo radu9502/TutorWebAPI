@@ -4,7 +4,7 @@ using System.Security.Claims;
 using TestAPIAuth.Models;
 namespace TestAPIAuth.Data
 {
-    public static class Authentification
+    public static class Authentication
     {
         public static IResult Register(string userName, string password, string email)
         {
@@ -22,7 +22,7 @@ namespace TestAPIAuth.Data
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 var context = new DataBaseContext();
-                User user = context.users.FirstOrDefault(x => x.UserName == userName);
+                User? user = context.users.FirstOrDefault(x => x.UserName == userName);
                 if (user == null || user.Password != password) return Results.NotFound("Incorrect user or password");
                 
 

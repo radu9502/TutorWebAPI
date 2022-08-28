@@ -11,26 +11,26 @@ namespace TestAPIAuth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthentificationController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public AuthentificationController(IConfiguration configuration)
+        public AuthenticationController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
 
-        // POST api/<Authentification>
+        // POST api/<Authentication>
     
         [HttpPost("Login")]
         public IResult Login(string userName, string password)
         {
-          return Authentification.Login(userName, password);
+          return Authentication.Login(userName, password);
         }
         [HttpPost("Register")]
         public IResult Register(string userName, string password, string email)
         {
-          return Authentification.Register(userName, password, email);
+          return Authentication.Register(userName, password, email);
             
         }
     }

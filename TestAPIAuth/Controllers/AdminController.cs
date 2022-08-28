@@ -1,31 +1,34 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TestAPIAuth.Data;
+using TestAPIAuth.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TestAPIAuth.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "1")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "1")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
 
         [HttpGet("Users")]
-        public IEnumerable<string> Users()
+        public List<User> Users()
         {
-            return new string[] { "value1", "value2" };
+            return Admin.GetUsers();
         }
 
         [HttpGet("Users/{id}")]
-        public string Users(int id)
+        public User Users(int id)
         {
-            return "value";
+            return Admin.GetUserById(id);
         }
         [HttpDelete("DeleteUser/{id}")]
-        public void DeleteUser(int id)
+        public IResult DeleteUser(int id)
         {
+           return Admin.DeleteUserById(id);
         }
 
 
@@ -33,39 +36,42 @@ namespace TestAPIAuth.Controllers
 
 
         [HttpGet("Categories")]
-        public IEnumerable<string> Categories()
+        public List<Category> Categories()
         {
-            return new string[] { "value1", "value2" };
+            return Admin.GetCategories();
         }
         [HttpGet("Category/{id}")]
-        public string Category(int id)
+        public Category Category(int id)
         {
-            return "value";
+            return Admin.GetCategoryById(id);
         }
 
         [HttpDelete("DeleteCategory/{id}")]
-        public void DeleteCategory(int id)
+        public IResult DeleteCategory(int id)
         {
+            return Admin.DeleteCategoryById(id);
         }
 
         [HttpGet("SubCategories")]
-        public IEnumerable<string> SubCategories()
+        public List<SubCategory> SubCategories()
         {
-            return new string[] { "value1", "value2" };
+            return Admin.GetSubCategories();
         }
         [HttpGet("SubCategories/{id}")]
-        public string SubCategories(int id)
+        public SubCategory SubCategories(int id)
         {
-            return "value";
+            return Admin.GetSubCategoryById(id);
         }
         [HttpDelete("DeleteSubCategory/{id}")]
-        public void DeleteSubCategory(int id)
+        public IResult DeleteSubCategory(int id)
         {
+            return Admin.DeleteSubCategoryById(id);
         }
 
         [HttpDelete("DeleteRequest/{id}")]
-        public void DeleteRequest(int id)
+        public IResult DeleteRequest(int id)
         {
+           return Admin.DeleteRequestById(id);
         }
 
 
