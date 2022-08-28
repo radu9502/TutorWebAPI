@@ -25,39 +25,13 @@ namespace TestAPIAuth.Controllers
         [HttpPost("Login")]
         public IResult Login(string userName, string password)
         {
-            string role = "admin";
-            if (!string.IsNullOrEmpty(userName) &&  !string.IsNullOrEmpty(password))
-            {
-                if (!(userName == "string") || !(password == "string1")) return Results.NotFound("User not found");
-
-                var claims = new[]
-                {
-            new Claim(ClaimTypes.NameIdentifier, userName),
-            new Claim(ClaimTypes.Role, role)
-        };
-
-                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("nksdnkadkndankadnkdaklnadlk"));
-
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-                var token = new JwtSecurityToken(
-                    claims: claims,
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creds);
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-                return Results.Ok(tokenString);
-            }
-            return Results.BadRequest("Invalid user credentials");
+          return Authentification.Login(userName, password);
         }
         [HttpPost("Register")]
-        public string Register(string userName, string password, string email)
+        public IResult Register(string userName, string password, string email)
         {
-           bool registerd = Authentification.Register(userName, password, email);
-            if (registerd) return "error";
-            else return "success";  
-           
+          return Authentification.Register(userName, password, email);
+            
         }
     }
 }

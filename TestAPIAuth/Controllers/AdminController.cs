@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TestAPIAuth.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "1")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
