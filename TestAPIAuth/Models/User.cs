@@ -9,5 +9,13 @@ namespace TestAPIAuth.Models
         public string Email { get; set; }
         public bool Deleted { get; set; }
         public Role Role { get; set; }
+        public User(string userName, string password, string email)
+        {
+            UserName = userName;
+            Password = password;
+            Email = email;
+            Deleted = false;
+            Role = Role.Normal;
+        }   
     }
 }

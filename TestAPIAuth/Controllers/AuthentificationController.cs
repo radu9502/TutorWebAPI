@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TestAPIAuth.Models;
+using TestAPIAuth.Data;
+
 
 namespace TestAPIAuth.Controllers
 {
@@ -19,12 +21,9 @@ namespace TestAPIAuth.Controllers
 
 
         // POST api/<Authentification>
+    
         [HttpPost("Login")]
-        public void Login(string userName, string password)
-        {
-        }
-        [HttpPost("Login2")]
-        public IResult Login2(string userName, string password)
+        public IResult Login(string userName, string password)
         {
             string role = "admin";
             if (!string.IsNullOrEmpty(userName) &&  !string.IsNullOrEmpty(password))
@@ -53,8 +52,12 @@ namespace TestAPIAuth.Controllers
             return Results.BadRequest("Invalid user credentials");
         }
         [HttpPost("Register")]
-        public void Register(string userName, string password, string email)
+        public string Register(string userName, string password, string email)
         {
+           bool registerd = Authentification.Register(userName, password, email);
+            if (registerd) return "error";
+            else return "success";  
+           
         }
     }
 }
