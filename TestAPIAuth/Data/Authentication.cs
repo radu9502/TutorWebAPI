@@ -6,14 +6,16 @@ namespace TestAPIAuth.Data
 {
     public static class Authentication
     {
+        private static DataBaseContext? _context = new DataBaseContext();
+
         public static IResult Register(string userName, string password, string email)
         {
-            var context = new DataBaseContext();
+           // var _context = new DataBaseContext();
             User user = new User(userName, password, email);
-            if (context.users.FirstOrDefault(x => x.UserName == userName) != null) return Results.BadRequest("User already exists");
-            if (context.users.FirstOrDefault(x => x.Email == email) != null) return Results.BadRequest("Email already exists");
-            context.users.Add(user);
-            context.SaveChanges();
+            if (_context.users.FirstOrDefault(x => x.UserName == userName) != null) return Results.BadRequest("User already exists");
+            if (_context.users.FirstOrDefault(x => x.Email == email) != null) return Results.BadRequest("Email already exists");
+            _context.users.Add(user);
+            _context.SaveChanges();
             return Results.Ok("Success");
         }
 
@@ -21,8 +23,8 @@ namespace TestAPIAuth.Data
         {
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
-                var context = new DataBaseContext();
-                User? user = context.users.FirstOrDefault(x => x.UserName == userName);
+                //var _context = new DataBaseContext();
+                User? user = _context.users.FirstOrDefault(x => x.UserName == userName);
                 if (user == null || user.Password != password) return Results.NotFound("Incorrect user or password");
                 
 

@@ -17,11 +17,6 @@ using Microsoft.EntityFrameworkCore;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-         /*   var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();*/
-
             var connectionString = "Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;";
             optionsBuilder.UseSqlServer(connectionString);
         }
