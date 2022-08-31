@@ -10,22 +10,23 @@ namespace TestAPIAuth.Data
 
             private static DataBaseContext _context = new DataBaseContext();
 
-    
-            public static IResult GetRequests()
-            {
-                return _context.requests != null ?
-                            Results.Ok(_context.requests.ToList()) :
-                            Results.BadRequest("Entity set 'DataBaseContext.requests'  is null.");
-            }
 
-            public static IResult GetRequestById(int? id)
+        public static async Task<IResult> GetRequests()
+         {
+            using var context = new DataBaseContext();   
+                return  context.requests != null ?
+                            Results.Ok( await _context.requests.ToListAsync()) :
+                            Results.BadRequest("Entity set 'DataBaseContext.requests'  is null.");
+        }
+
+            public static async Task<IResult> GetRequestById(int? id)
             {
                 if (id == null || _context.requests == null)
                 {
                     return Results.NotFound();
                 }
 
-                Request request = _context.requests.FirstOrDefault(m => m.Id == id);
+                Request? request = await _context.requests.FirstOrDefaultAsync(m => m.Id == id);
                 if (request == null)
                 {
                     return Results.NotFound();
@@ -36,20 +37,20 @@ namespace TestAPIAuth.Data
 
 
 
-            public static IResult CreateRequest(Request request, bool ModelState)
+            public static async Task<IResult> CreateRequest(Request request, bool ModelState)
             {
                 if (ModelState)
                 {
                    var context = new DataBaseContext();
-                    context.Add(request);
-                    context.SaveChanges();
+                   await context.AddAsync(request);
+                   await context.SaveChangesAsync();
                     return Results.Ok(request);
                 }
                 return Results.BadRequest();
             }
 
 
-            public static IResult EditRequest(int id, Request request, bool ModelState)
+            public static async Task<IResult> EditRequest(int id, Request request, bool ModelState)
             {
                 if (id != request.Id)
                 {
@@ -62,7 +63,7 @@ namespace TestAPIAuth.Data
                     {
                     var context = new DataBaseContext();
                         context.Update(request);
-                        context.SaveChangesAsync();
+                        await context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -76,17 +77,17 @@ namespace TestAPIAuth.Data
             }
 
 
-            public static IResult DeleteRequest(int id)
+            public static async Task<IResult> DeleteRequest(int id)
             {
                 if (_context.requests == null)
                 {
                     return Results.Problem("Invalid request");
                 }
-                var request = _context.requests.FirstOrDefault(x => x.Id == id);
+                var request = await _context.requests.FirstOrDefaultAsync(x => x.Id == id);
                 if (request != null)
                 {
                     _context.requests.Remove(request);
-                    _context.SaveChanges();
+                   await _context.SaveChangesAsync();
                      return Results.Ok("Deleted");
 
                 }

@@ -23,15 +23,14 @@ namespace TestAPIAuth.Controllers
         // POST api/<Authentication>
     
         [HttpPost("Login")]
-        public IResult Login(string userName, string password)
+        public async Task<IResult> Login(string userName, string password)
         {
-          return Authentication.Login(userName, password);
+          return  await Authentication.Login(userName, password);
         }
         [HttpPost("Register")]
-        public IResult Register(string userName, string password, string email)
+        public async Task<IResult> Register(string userName, string password, string email)
         {
-          return Authentication.Register(userName, password, email);
-            
+          return await Authentication.Register(userName, password, email);
         }
     }
 }

@@ -16,36 +16,36 @@ namespace TestAPIAuth.Controllers
 
         // GET: Requests
         [HttpGet("GetRequests")]
-        public IResult GetRequests()
+        public Task<IResult> GetRequests()
         {
            return Requests.GetRequests();
         }
 
         // GET: Requests/Details/5
         [HttpGet("Request/{id}")]
-        public  IResult GetRequestById(int? id)
+        public Task<IResult> GetRequestById(int? id)
         {
-          return Requests.GetRequestById(id);
+          return  Requests.GetRequestById(id);
         }
 
         [HttpPost("CreateRequest")]
-        public IResult CreateRequest(Request request)
+        public Task<IResult> CreateRequest(Request request)
         {
             return Requests.CreateRequest(request, ModelState.IsValid);
         }
 
         [HttpPost("EditRequest")]
-        public IResult EditRequest(int id, Request request)
+        public Task<IResult> EditRequest(int id, Request request)
         {
-         return Requests.EditRequest(id, request, ModelState.IsValid);
+            return Requests.EditRequest(id, request, ModelState.IsValid);
         }
 
   
         // POST: Requests/Delete/5
         [HttpGet("DeleteRequest")]
-        public IResult DeleteRequest(int id)
+        public Task<IResult> DeleteRequest(int id)
         {
-           return Requests.DeleteRequest(id);
+            return Requests.DeleteRequest(id);
         }
 
     }

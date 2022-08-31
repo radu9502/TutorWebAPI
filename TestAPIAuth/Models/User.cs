@@ -15,7 +15,7 @@ namespace TestAPIAuth.Models
             Password = password;
             Email = email;
             Deleted = false;
-            Role = Role.Normal;
+            Role = Role.Admin;
         }   
     }
 }
