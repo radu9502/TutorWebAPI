@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestAPIAuth.Data;
 using TestAPIAuth.Models;
@@ -23,7 +24,7 @@ namespace TestAPIAuth.Controllers
         {
             return Requests.GetRequestById(id);
         }
-
+        [Authorize]
         [HttpPost("CreateRequest")]
 
         public Task<IResult> CreateRequest(Request request, [FromHeader] string authorization)
@@ -31,7 +32,7 @@ namespace TestAPIAuth.Controllers
 
             return Requests.CreateRequest(request, authorization, ModelState.IsValid);
         }
-
+        [Authorize]
         [HttpPost("EditRequest")]
         public Task<IResult> EditRequest(int id, Request request, [FromHeader] string authorization)
         {
@@ -40,7 +41,7 @@ namespace TestAPIAuth.Controllers
             return Requests.EditRequest(id, request, authorization, ModelState.IsValid);
         }
 
-
+        [Authorize]
         // POST: Requests/Delete/5
         [HttpGet("DeleteRequest")]
         public Task<IResult> DeleteRequest(int id, [FromHeader] string authorization)
