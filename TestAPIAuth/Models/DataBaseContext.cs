@@ -2,12 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 /*using Microsoft.EntityFrameworkCore;*/
 
- namespace TestAPIAuth.Models
+namespace TestAPIAuth.Models
 {
     public class DataBaseContext : DbContext
     {
-        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) 
-        { 
+        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
+        {
 
         }
 
@@ -25,6 +25,6 @@ using Microsoft.EntityFrameworkCore;
         public DbSet<User> users { get; set; }
         public DbSet<Message> messages { get; set; }
         public DbSet<Request> requests { get; set; }
-        
+
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TestAPIAuth.Models;
-using Microsoft.EntityFrameworkCore;
 namespace TestAPIAuth.Data
 {
     public static class Authentication
@@ -11,7 +11,7 @@ namespace TestAPIAuth.Data
 
         public static async Task<IResult> Register(string userName, string password, string email)
         {
-           // var _context = new DataBaseContext();
+            // var _context = new DataBaseContext();
             User user = new User(userName, password, email);
             if (await _context.users.FirstOrDefaultAsync(x => x.UserName == userName) != null) return Results.BadRequest("User already exists");
             if (await _context.users.FirstOrDefaultAsync(x => x.Email == email) != null) return Results.BadRequest("Email already exists");
@@ -28,11 +28,15 @@ namespace TestAPIAuth.Data
                 //var _context = new DataBaseContext();
                 User? user = await _context.users.FirstOrDefaultAsync(x => x.UserName == userName);
                 if (user == null || user.Password != password) return Results.NotFound("Incorrect user or password");
-                
+
 
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, userName),
+                    new Claim("name", user.UserName),
+                    new Claim("id", user.Id.ToString()),
+                    new Claim("role", user.Role.ToString()),
+                    new Claim(ClaimTypes.Name, userName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Role, user.Role.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Aud,"https://localhost:7260/api"),

@@ -4,8 +4,8 @@
     {
         public enum Role
         {
-           Normal,
-           Admin
+            Normal,
+            Admin
         }
         public enum Dificulty
         {

@@ -16,6 +16,6 @@ namespace TestAPIAuth.Models
             Email = email;
             Deleted = false;
             Role = Role.Admin;
-        }   
+        }
     }
 }

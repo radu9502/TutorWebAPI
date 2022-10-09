@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using TestAPIAuth.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using TestAPIAuth.Data;
 
 
@@ -21,16 +16,16 @@ namespace TestAPIAuth.Controllers
 
 
         // POST api/<Authentication>
-    
+
         [HttpPost("Login")]
         public async Task<IResult> Login(string userName, string password)
         {
-          return  await Authentication.Login(userName, password);
+            return await Authentication.Login(userName, password);
         }
         [HttpPost("Register")]
         public async Task<IResult> Register(string userName, string password, string email)
         {
-          return await Authentication.Register(userName, password, email);
+            return await Authentication.Register(userName, password, email);
         }
     }
 }

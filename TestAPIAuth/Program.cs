@@ -54,8 +54,37 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddDbContext<DataBaseContext>(o => o.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;"));
+builder.Services.AddCors(options =>
+
+{
+
+    options.AddPolicy(
+
+    name: "AllowOrigin",
+    policy =>
+    {
+        // policy.WithOrigins("http://localhost:4200");
+        policy.WithOrigins("").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+
+    /* builder =>
+     {
+
+         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+     });*/
+});
+/*builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder =>
+    {
+
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});*/
+
+
 
 var app = builder.Build();
+app.UseCors("AllowOrigin");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -70,4 +99,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
 app.Run();
+
