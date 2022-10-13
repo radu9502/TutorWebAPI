@@ -63,7 +63,7 @@ namespace TestAPIAuth.Data
             if (ModelState)
             {
                 //Validate if the user is allowed to make the changes
-                if (IsOwner(authorization, request) || IsAdmin(authorization, request) == false) return Results.BadRequest("Restricted");
+                if (IsOwner(authorization, request) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
 
 
                 try
@@ -94,7 +94,7 @@ namespace TestAPIAuth.Data
             if (request != null)
             {
                 //Validate if the user is allowed to make the changes
-                if(IsOwner(authorization, request) || IsAdmin(authorization, request) == false) return Results.BadRequest("Restricted");
+                if (IsOwner(authorization, request) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
 
                 _context.requests.Remove(request);
                 await _context.SaveChangesAsync();

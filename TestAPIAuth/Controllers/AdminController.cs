@@ -7,23 +7,22 @@ using TestAPIAuth.Data;
 
 namespace TestAPIAuth.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    // [EnableCors("AllowOrigin")]
     public class AdminController : ControllerBase
     {
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpGet("Users")]
         public Task<IResult> Users()
         {
             return Admin.GetUsers();
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("Users/{id}")]
-        public Task<IResult> Users(int id)
+        public Task<IResult> Users(int id, [FromHeader] string authorization)
         {
-            return Admin.GetUserById(id);
+            return Admin.GetUserById(id, authorization);
         }
         [HttpDelete("DeleteUser/{id}")]
         public Task<IResult> DeleteUser(int id)
@@ -45,7 +44,7 @@ namespace TestAPIAuth.Controllers
         {
             return Admin.GetCategoryById(id);
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteCategory/{id}")]
         public Task<IResult> DeleteCategory(int id)
         {
@@ -62,12 +61,13 @@ namespace TestAPIAuth.Controllers
         {
             return await Admin.GetSubCategoryById(id);
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteSubCategory/{id}")]
         public async Task<IResult> DeleteSubCategory(int id)
         {
             return await Admin.DeleteSubCategoryById(id);
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteRequest/{id}")]
         public async Task<IResult> DeleteRequest(int id)
         {

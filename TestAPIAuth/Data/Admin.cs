@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestAPIAuth.Models;
+using static TestAPIAuth.Utils.JwtInfo;
 
 namespace TestAPIAuth.Data
 {
@@ -15,8 +16,10 @@ namespace TestAPIAuth.Data
                 Results.Ok(_users);
         }
 
-        internal static async Task<IResult> GetUserById(int id)
+        internal static async Task<IResult> GetUserById(int id, string authorization)
         {
+            Request request = new Request();
+            if (IsCurrentUser(authorization, id) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
             using var context = new DataBaseContext();
             User? _user = await context.users.FirstOrDefaultAsync(x => x.Id == id);
             return (_user == null) ?

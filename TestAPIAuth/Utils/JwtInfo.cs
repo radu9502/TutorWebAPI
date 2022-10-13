@@ -53,7 +53,20 @@ namespace TestAPIAuth.Utils
 
             return true;
         }
-        public static bool IsAdmin(string authorization, Request request)
+        public static bool IsCurrentUser(string authorization, int id)
+        {
+
+            string HeaderId = JwtInfo.GetJwtId(authorization);
+            if (HeaderId != id.ToString())
+            {
+                Console.WriteLine("You're not this user!");
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsAdmin(string authorization)
         {
 
             string HeaderRole = JwtInfo.GetJwtRole(authorization);
@@ -64,5 +77,6 @@ namespace TestAPIAuth.Utils
             }
             return true;
         }
+
     }
 }

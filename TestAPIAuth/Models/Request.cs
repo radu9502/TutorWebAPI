@@ -3,7 +3,7 @@ namespace TestAPIAuth.Models
 {
     public class Request
     {
-        public int Id { get; private set; }
+        public int? Id { get; private set; }
         public int RequestorId { get; set; }
         public int TutorId { get; set; }
         public string Title { get; set; }

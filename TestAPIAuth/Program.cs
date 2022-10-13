@@ -6,7 +6,7 @@ using System.Text;
 using TestAPIAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+string connString = builder.Configuration["ConnectionStrings:dataBase"];
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -47,13 +47,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "https://localhost:7260/api",//["Jwt:Issuer"],
-        ValidAudience = "https://localhost:7260/api",//["Jwt:Audience"],
-        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["MIIBCgKCAQEAsXoUruE3QybI3ygaARBUl0e663kxvylbSqlLBPf"]))
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MIIBCgKCAQEAsXoUruE3QybI3ygaARBUl0e663kxvylbSqlLBPf"))
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],  // "https://localhost:7260/api",//["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MIIBCgKCAQEAsXoUruE3QybI3ygaARBUl0e663kxvylbSqlLBPf"))
     };
 });
-builder.Services.AddDbContext<DataBaseContext>(o => o.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;"));
+builder.Services.AddDbContext<DataBaseContext>(o => o.UseSqlServer(connString));
 builder.Services.AddCors(options =>
 
 {
@@ -63,23 +63,12 @@ builder.Services.AddCors(options =>
     name: "AllowOrigin",
     policy =>
     {
-        // policy.WithOrigins("http://localhost:4200");
+
         policy.WithOrigins("").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 
-    /* builder =>
-     {
-
-         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-     });*/
 });
-/*builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(builder =>
-    {
 
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});*/
 
 
 

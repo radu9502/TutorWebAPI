@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestAPIAuth.Data;
@@ -24,15 +25,15 @@ namespace TestAPIAuth.Controllers
         {
             return Requests.GetRequestById(id);
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("CreateRequest")]
 
-        public Task<IResult> CreateRequest(Request request, [FromHeader] string authorization)
+        public Task<IResult> CreateRequest([FromBody] Request request, [FromHeader] string authorization)
         {
 
             return Requests.CreateRequest(request, authorization, ModelState.IsValid);
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("EditRequest")]
         public Task<IResult> EditRequest(int id, Request request, [FromHeader] string authorization)
         {
@@ -41,7 +42,7 @@ namespace TestAPIAuth.Controllers
             return Requests.EditRequest(id, request, authorization, ModelState.IsValid);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         // POST: Requests/Delete/5
         [HttpGet("DeleteRequest")]
         public Task<IResult> DeleteRequest(int id, [FromHeader] string authorization)
