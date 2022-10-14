@@ -4,32 +4,43 @@ using Newtonsoft.Json;
 namespace TestAPIAuth.Models
 {
 
-    public class DataBaseContext : DbContext
+    public class DataBaseContext : DbContext, IDataBaseContext
     {
-
-        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
+        private readonly IConfiguration _configuration;
+        public DataBaseContext(IConfiguration configuration)
         {
-
-
+            _configuration = configuration;
         }
-        public DataBaseContext()
-        {
+        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
 
-        }
+        public DataBaseContext() { }
+
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             var _settings = new DataSettingsManager().LoadSettings();
             var _connection = _settings.ConnectionString.ToString();
+
             //var connectionString = "Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;";// _configuration.GetConnectionString("dataBase"); 
             optionsBuilder.UseSqlServer(_connection);
+            Console.WriteLine(_connection);
         }
+
+        public Task SaveChangesAsync() => base.SaveChangesAsync();
+
+
+
+
+
         public DbSet<Category> categories { get; set; }
         public DbSet<SubCategory> subCategories { get; set; }
         public DbSet<User> users { get; set; }
         public DbSet<Message> messages { get; set; }
         public DbSet<Request> requests { get; set; }
+
 
     }
 

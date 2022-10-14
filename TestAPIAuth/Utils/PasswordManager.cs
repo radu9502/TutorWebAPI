@@ -18,7 +18,7 @@ namespace TestAPIAuth.Utils
         {
             byte[] byteArray = Encoding.Unicode.GetBytes(String.Concat(Salt, PlainPassword));
             SHA256Managed sha256 = new SHA256Managed();
-            byte[] hashBytes = sha256.ComputeHash(byteArray);
+            //  byte[] hashBytes = sha256.ComputeHash(byteArray);
             byte[] hashedBytes = sha256.ComputeHash(byteArray);
             return Convert.ToBase64String(hashedBytes);
         }

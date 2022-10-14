@@ -3,16 +3,24 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TestAPIAuth.Data.Interfaces;
 using TestAPIAuth.Models;
 using static TestAPIAuth.Utils.PasswordManager;
 
 namespace TestAPIAuth.Data
 {
-    public static class Authentication
+    public class Authentication : IAuthentication
     {
-        private static DataBaseContext? _context = new DataBaseContext();
+        private readonly IDataBaseContext _context;
 
-        public static async Task<IResult> Register(string userName, string password, string email)
+        public Authentication(IDataBaseContext context)
+        {
+            _context = context;
+        }
+
+
+
+        public async Task<IResult> Register(string userName, string password, string email)
         {
 
             User user = new User(userName, password, email);
@@ -31,11 +39,11 @@ namespace TestAPIAuth.Data
             return Results.Ok("Success");
         }
 
-        public static async Task<IResult> Login(string userName, string password)
+        public async Task<IResult> Login(string userName, string password)
         {
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
-                //var _context = new DataBaseContext();
+
                 User? user = await _context.users.FirstOrDefaultAsync(x => x.UserName == userName);
                 bool isPasswordCorrect = CompareHashedPasswords(password, user.Password, user.Salt);
                 if (user == null || !isPasswordCorrect) return Results.NotFound("Incorrect user or password");

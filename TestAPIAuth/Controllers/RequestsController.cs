@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestAPIAuth.Data;
+using TestAPIAuth.Data.Interfaces;
 using TestAPIAuth.Models;
 
 namespace TestAPIAuth.Controllers
@@ -10,20 +10,25 @@ namespace TestAPIAuth.Controllers
 
     public class RequestsController : Controller
     {
+        private readonly IRequests _requests;
 
+        public RequestsController(IRequests requests)
+        {
+            _requests = requests;
+        }
 
         // GET: Requests
         [HttpGet("GetRequests")]
         public Task<IResult> GetRequests()
         {
-            return Requests.GetRequests();
+            return _requests.GetRequests();
         }
 
         // GET: Requests/Details/5
         [HttpGet("Request/{id}")]
         public Task<IResult> GetRequestById(int? id)
         {
-            return Requests.GetRequestById(id);
+            return _requests.GetRequestById(id);
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("CreateRequest")]
@@ -31,7 +36,7 @@ namespace TestAPIAuth.Controllers
         public Task<IResult> CreateRequest([FromBody] Request request, [FromHeader] string authorization)
         {
 
-            return Requests.CreateRequest(request, authorization, ModelState.IsValid);
+            return _requests.CreateRequest(request, authorization, ModelState.IsValid);
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("EditRequest")]
@@ -39,7 +44,7 @@ namespace TestAPIAuth.Controllers
         {
 
 
-            return Requests.EditRequest(id, request, authorization, ModelState.IsValid);
+            return _requests.EditRequest(id, request, authorization, ModelState.IsValid);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -47,7 +52,7 @@ namespace TestAPIAuth.Controllers
         [HttpGet("DeleteRequest")]
         public Task<IResult> DeleteRequest(int id, [FromHeader] string authorization)
         {
-            return Requests.DeleteRequest(id, authorization);
+            return _requests.DeleteRequest(id, authorization);
         }
 
     }

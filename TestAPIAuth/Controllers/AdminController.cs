@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestAPIAuth.Data;
+using TestAPIAuth.Data.Interfaces;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TestAPIAuth.Controllers
 {
@@ -12,22 +11,29 @@ namespace TestAPIAuth.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly IAdmin admin;
+
+        public AdminController(IAdmin _admin)
+        {
+            admin = _admin;
+        }
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpGet("Users")]
-        public Task<IResult> Users()
+        public async Task<IResult> Users()
         {
-            return Admin.GetUsers();
+            return await admin.GetUsers();
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("Users/{id}")]
-        public Task<IResult> Users(int id, [FromHeader] string authorization)
+        public async Task<IResult> Users(int id, [FromHeader] string authorization)
         {
-            return Admin.GetUserById(id, authorization);
+            return await admin.GetUserById(id, authorization);
         }
         [HttpDelete("DeleteUser/{id}")]
-        public Task<IResult> DeleteUser(int id)
+        public async Task<IResult> DeleteUser(int id)
         {
-            return Admin.DeleteUserById(id);
+            return await admin.DeleteUserById(id);
         }
 
 
@@ -35,43 +41,43 @@ namespace TestAPIAuth.Controllers
 
 
         [HttpGet("Categories")]
-        public Task<IResult> Categories()
+        public async Task<IResult> Categories()
         {
-            return Admin.GetCategories();
+            return await admin.GetCategories();
         }
         [HttpGet("Category/{id}")]
-        public Task<IResult> Category(int id)
+        public async Task<IResult> Category(int id)
         {
-            return Admin.GetCategoryById(id);
+            return await admin.GetCategoryById(id);
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteCategory/{id}")]
-        public Task<IResult> DeleteCategory(int id)
+        public async Task<IResult> DeleteCategory(int id)
         {
-            return Admin.DeleteCategoryById(id);
+            return await admin.DeleteCategoryById(id);
         }
 
         [HttpGet("SubCategories")]
-        public Task<IResult> SubCategories()
+        public async Task<IResult> SubCategories()
         {
-            return Admin.GetSubCategories();
+            return await admin.GetSubCategories();
         }
         [HttpGet("SubCategories/{id}")]
         public async Task<IResult> SubCategories(int id)
         {
-            return await Admin.GetSubCategoryById(id);
+            return await admin.GetSubCategoryById(id);
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteSubCategory/{id}")]
         public async Task<IResult> DeleteSubCategory(int id)
         {
-            return await Admin.DeleteSubCategoryById(id);
+            return await admin.DeleteSubCategoryById(id);
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("DeleteRequest/{id}")]
         public async Task<IResult> DeleteRequest(int id)
         {
-            return await Admin.DeleteRequestById(id);
+            return await admin.DeleteRequestById(id);
         }
 
 

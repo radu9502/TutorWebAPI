@@ -1,6 +1,6 @@
 ﻿namespace TestAPIAuth.Utils
 {
-    public static class Enums
+    public class Enums
     {
         public enum Role
         {
@@ -13,7 +13,11 @@
             HighSchool,
             University
         }
+        public void Log()
+        {
 
+            Console.WriteLine("test injection");
+        }
 
     }
 }

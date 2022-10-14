@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TestAPIAuth.Data;
-
+using TestAPIAuth.Data.Interfaces;
 
 namespace TestAPIAuth.Controllers
 {
@@ -8,24 +7,24 @@ namespace TestAPIAuth.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        public AuthenticationController(IConfiguration configuration)
+
+        private readonly IAuthentication _auth;
+
+        public AuthenticationController(IAuthentication auth)
         {
-            _configuration = configuration;
+            _auth = auth;
         }
 
-
-        // POST api/<Authentication>
 
         [HttpPost("Login")]
         public async Task<IResult> Login(string userName, string password)
         {
-            return await Authentication.Login(userName, password);
+            return await _auth.Login(userName, password);
         }
         [HttpPost("Register")]
         public async Task<IResult> Register(string userName, string password, string email)
         {
-            return await Authentication.Register(userName, password, email);
+            return await _auth.Register(userName, password, email);
         }
     }
 }

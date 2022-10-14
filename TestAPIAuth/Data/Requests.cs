@@ -1,16 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestAPIAuth.Data.Interfaces;
 using TestAPIAuth.Models;
 using static TestAPIAuth.Utils.JwtInfo;
 
 namespace TestAPIAuth.Data
 {
-    public static class Requests
+    public class Requests : IRequests
     {
 
-        private static DataBaseContext _context = new DataBaseContext();
+        private readonly IDataBaseContext _context;
 
+        public Requests(IDataBaseContext context)
+        {
+            _context = context;
+        }
 
-        public static async Task<IResult> GetRequests()
+        public async Task<IResult> GetRequests()
         {
             using var context = new DataBaseContext();
             return context.requests != null ?
@@ -18,7 +23,7 @@ namespace TestAPIAuth.Data
                         Results.BadRequest("Entity set 'DataBaseContext.requests'  is null.");
         }
 
-        public static async Task<IResult> GetRequestById(int? id)
+        public async Task<IResult> GetRequestById(int? id)
         {
             if (id == null || _context.requests == null)
             {
@@ -36,7 +41,7 @@ namespace TestAPIAuth.Data
 
 
 
-        public static async Task<IResult> CreateRequest(Request request, string authorization, bool ModelState)
+        public async Task<IResult> CreateRequest(Request request, string authorization, bool ModelState)
         {
 
 
@@ -44,16 +49,15 @@ namespace TestAPIAuth.Data
             {
                 //Validate if the user is allowed to make the changes
                 if (!IsOwner(authorization, request)) return Results.BadRequest("Restricted");
-                var context = new DataBaseContext();
-                await context.AddAsync(request);
-                await context.SaveChangesAsync();
+                await _context.requests.AddAsync(request);
+                await _context.SaveChangesAsync();
                 return Results.Ok(request);
             }
             return Results.BadRequest();
         }
 
 
-        public static async Task<IResult> EditRequest(int id, Request request, string authorization, bool ModelState)
+        public async Task<IResult> EditRequest(int id, Request request, string authorization, bool ModelState)
         {
             if (id != request.Id)
             {
@@ -68,9 +72,9 @@ namespace TestAPIAuth.Data
 
                 try
                 {
-                    var context = new DataBaseContext();
-                    context.Update(request);
-                    await context.SaveChangesAsync();
+
+                    _context.requests.Update(request);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -84,7 +88,7 @@ namespace TestAPIAuth.Data
         }
 
 
-        public static async Task<IResult> DeleteRequest(int id, string authorization)
+        public async Task<IResult> DeleteRequest(int id, string authorization)
         {
             if (_context.requests == null)
             {
