@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestAPIAuth.Data.Interfaces;
 using TestAPIAuth.Models;
+using TestAPIAuth.Utils;
 using static TestAPIAuth.Utils.JwtInfo;
 
 namespace TestAPIAuth.Data
@@ -15,12 +16,16 @@ namespace TestAPIAuth.Data
             _context = context;
         }
 
-        public async Task<IResult> GetRequests()
+        public async Task<IResult> GetRequests(int? page,int? pageSize, int? category, string? orderType, string? orderBy)
         {
-            using var context = new DataBaseContext();
-            return context.requests != null ?
-                        Results.Ok(await _context.requests.ToListAsync()) :
-                        Results.BadRequest("Entity set 'DataBaseContext.requests'  is null.");
+            if (_context.requests != null) {
+                List<Request>? requestList = await _context.requests.ToListAsync();
+                requestList = Filters.RequestsFilter(ref requestList, page,pageSize, category, orderType, orderBy);
+                if (requestList.Count < 1) return Results.NoContent();
+                return Results.Ok(requestList);
+                            
+            }
+            return Results.BadRequest("Entity set 'DataBaseContext.requests'  is null.");
         }
 
         public async Task<IResult> GetRequestById(int? id)
@@ -67,7 +72,7 @@ namespace TestAPIAuth.Data
             if (ModelState)
             {
                 //Validate if the user is allowed to make the changes
-                if (IsOwner(authorization, request) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
+                if ((IsOwner(authorization, request) || IsAdmin(authorization)) == false) return Results.BadRequest("Restricted");
 
 
                 try
@@ -98,7 +103,7 @@ namespace TestAPIAuth.Data
             if (request != null)
             {
                 //Validate if the user is allowed to make the changes
-                if (IsOwner(authorization, request) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
+                if ((IsOwner(authorization, request) || IsAdmin(authorization)) == false) return Results.BadRequest("Restricted");
 
                 _context.requests.Remove(request);
                 await _context.SaveChangesAsync();

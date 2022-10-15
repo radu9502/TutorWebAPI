@@ -19,9 +19,11 @@ namespace TestAPIAuth.Controllers
 
         // GET: Requests
         [HttpGet("GetRequests")]
-        public Task<IResult> GetRequests()
+        public Task<IResult> GetRequests(int? page,int? pageSiz, int? category, string? orderType, string? orderBy)
         {
-            return _requests.GetRequests();
+            if (page != null) Console.WriteLine(page);
+            if (category != null) Console.WriteLine(category);
+            return _requests.GetRequests(page, pageSiz, category, orderType, orderBy);
         }
 
         // GET: Requests/Details/5

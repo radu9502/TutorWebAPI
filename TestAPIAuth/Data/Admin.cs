@@ -25,8 +25,8 @@ namespace TestAPIAuth.Data
 
         public async Task<IResult> GetUserById(int id, string authorization)
         {
-            Request request = new Request();
-            if (IsCurrentUser(authorization, id) || IsAdmin(authorization) == false) return Results.BadRequest("Restricted");
+            
+            if ((IsCurrentUser(authorization, id) || IsAdmin(authorization)) == false) return Results.BadRequest("Restricted");
 
             User? _user = await _context.users.FirstOrDefaultAsync(x => x.Id == id);
             return (_user == null) ?

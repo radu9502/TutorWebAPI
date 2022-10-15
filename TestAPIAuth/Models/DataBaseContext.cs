@@ -26,7 +26,7 @@ namespace TestAPIAuth.Models
 
             //var connectionString = "Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;";// _configuration.GetConnectionString("dataBase"); 
             optionsBuilder.UseSqlServer(_connection);
-            Console.WriteLine(_connection);
+           // Console.WriteLine(_connection);
         }
 
         public Task SaveChangesAsync() => base.SaveChangesAsync();
