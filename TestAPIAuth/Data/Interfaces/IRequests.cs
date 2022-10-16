@@ -8,6 +8,6 @@ namespace TestAPIAuth.Data.Interfaces
         Task<IResult> DeleteRequest(int id, string authorization);
         Task<IResult> EditRequest(int id, Request request, string authorization, bool ModelState);
         Task<IResult> GetRequestById(int? id);
-        Task<IResult> GetRequests(int? page,int? pageSize, int? category, string? orderType, string? orderBy);
+        Task<IResult> GetRequests(Filter? filter);
     }
 }

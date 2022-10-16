@@ -21,12 +21,10 @@ namespace TestAPIAuth.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            var _settings = new DataSettingsManager().LoadSettings();
-            var _connection = _settings.ConnectionString.ToString();
-
-            //var connectionString = "Server=localhost\\SQLEXPRESS;Database=TutorAPI;Trusted_Connection=True;";// _configuration.GetConnectionString("dataBase"); 
+            
+            var _connection = _configuration["ConnectionString2:DataBase"];
             optionsBuilder.UseSqlServer(_connection);
-           // Console.WriteLine(_connection);
+         
         }
 
         public Task SaveChangesAsync() => base.SaveChangesAsync();
@@ -44,22 +42,5 @@ namespace TestAPIAuth.Models
 
     }
 
-    public class DataSettingsManager
-    {
-        private const string _dataSettingsFilePath = "appsettings.json";
-        public virtual DataSettings LoadSettings()
-        {
-            var text = File.ReadAllText(_dataSettingsFilePath);
-            if (string.IsNullOrEmpty(text))
-                return new DataSettings();
-
-            DataSettings settings = JsonConvert.DeserializeObject<DataSettings>(text);
-            return settings;
-        }
-    }
-    public class DataSettings
-    {
-        public string ConnectionString { get; set; }
-    }
 
 }

@@ -16,11 +16,11 @@ namespace TestAPIAuth.Data
             _context = context;
         }
 
-        public async Task<IResult> GetRequests(int? page,int? pageSize, int? category, string? orderType, string? orderBy)
+        public async Task<IResult> GetRequests(Filter? filter)
         {
             if (_context.requests != null) {
                 List<Request>? requestList = await _context.requests.ToListAsync();
-                requestList = Filters.RequestsFilter(ref requestList, page,pageSize, category, orderType, orderBy);
+                requestList = Filters.RequestsFilter(ref requestList, filter);
                 if (requestList.Count < 1) return Results.NoContent();
                 return Results.Ok(requestList);
                             
